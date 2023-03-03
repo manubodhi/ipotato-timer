@@ -38,7 +38,7 @@ class _HomeScreenState extends State<HomeScreen> {
         onPressed: () => Utils.showSimpleDialogBox(
           context: context,
           title: "Add task",
-          body: AddTaskDialogWidget(),
+          body: const AddTaskDialogWidget(),
         ),
       ),
       body: ListView(
