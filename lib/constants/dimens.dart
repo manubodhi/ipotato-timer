@@ -1,11 +1,14 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 ///Storing dimensions here and referring throughout the app
 class Dimens {
   static const EdgeInsets regularPagePadding =
-      EdgeInsets.fromLTRB(10, 10, 10, 10);
+      EdgeInsets.fromLTRB(20, 20, 20, 20);
 
-  static const EdgeInsets timerBoxPadding = EdgeInsets.fromLTRB(10, 5, 10, 5);
+  static const EdgeInsets regularButtonPadding =
+      EdgeInsets.fromLTRB(10, 5, 10, 5);
+
+  static const EdgeInsets smallItemPadding = EdgeInsets.all(5);
 
   static const EdgeInsets cardPadding = EdgeInsets.fromLTRB(32, 25, 32, 20);
 

@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:ipotato/constants/app_text_styles.dart';
 import 'package:ipotato/constants/dimens.dart';
 import 'package:ipotato/constants/images.dart';
+import 'package:ipotato/constants/strings.dart';
 import 'package:ipotato/routes/route_names.dart';
+import 'package:ipotato/ui/common_widgets/regular_horizontal_margin.dart';
 import 'package:ipotato/utils/utils.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -42,20 +44,22 @@ class _SplashScreenState extends State<SplashScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SizedBox(
-              width: Utils.getScreenWidth(context) * 0.5,
-              child: Image.asset(Images.logo),
-            ),
-            const SizedBox(
-              height: 50,
-            ),
+            buildLogoBox(context),
+            const RegularVerticalMargin(height: 50),
             const Text(
-              "Ipotato Timer",
+              Strings.iPotatoSplashText,
               style: AppTextStyles.textStyleRegularSplashGreenText,
-            )
+            ),
           ],
         ),
       )),
+    );
+  }
+
+  SizedBox buildLogoBox(BuildContext context) {
+    return SizedBox(
+      width: Utils.getScreenWidth(context) * 0.5,
+      child: Image.asset(Images.logo),
     );
   }
 }

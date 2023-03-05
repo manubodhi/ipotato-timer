@@ -4,12 +4,16 @@ import 'package:ipotato/constants/color_palette.dart';
 import 'package:ipotato/constants/dimens.dart';
 import 'package:ipotato/constants/images.dart';
 import 'package:ipotato/constants/strings.dart';
-import 'package:ipotato/utils/utils.dart';
+import 'package:ipotato/data/local/models/task_model.dart';
+import 'package:ipotato/ui/common_widgets/regular_horizontal_margin.dart';
 
 class TimerTaskCardWidget extends StatelessWidget {
   const TimerTaskCardWidget({
     super.key,
+    required this.taskModel,
   });
+
+  final TaskModel taskModel;
 
   @override
   Widget build(BuildContext context) {
@@ -27,92 +31,141 @@ class TimerTaskCardWidget extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Image.asset(
-                      Images.icSoundWave,
-                      height: Dimens.icDefaultHeight,
-                      width: Dimens.icDefaultHeight,
-                    ),
-                    Text(
-                      "FINISHED",
-                      style: AppTextStyles.textStyleCardTimerGreenText,
-                    ),
-                    Image.asset(
-                      Images.icSoundWave,
-                      height: Dimens.icDefaultHeight,
-                      width: Dimens.icDefaultHeight,
-                    ),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Flexible(
-                      fit: FlexFit.loose,
-                      flex: 7,
-                      child: Text(
-                        "00:02:32",
-                        style: AppTextStyles.textStyleCardTimerGreenText,
+                taskModel.isCompleted!
+                    ? buildFinishedTextRow()
+                    : buildTimerAndButtonsRow(
+                        timerValue: taskModel.timerValue!,
+                        showPauseButton: taskModel.isStarted!,
+                        showPlayButton:
+                            !taskModel.isStarted! || taskModel.isPaused!,
+                        showStopButton:
+                            taskModel.isPaused! || taskModel.isStarted!,
                       ),
-                    ),
-                    Flexible(
-                      fit: FlexFit.loose,
-                      flex: 1,
-                      child: Image.asset(
-                        Images.icPlayBtn,
-                        height: Dimens.icDefaultHeight,
-                        width: Dimens.icDefaultHeight,
-                      ),
-                    ),
-                    Flexible(
-                      flex: 1,
-                      fit: FlexFit.loose,
-                      child: Image.asset(
-                        Images.icPauseBtn,
-                        height: Dimens.icDefaultHeight,
-                        width: Dimens.icDefaultHeight,
-                      ),
-                    ),
-                    Flexible(
-                      flex: 1,
-                      fit: FlexFit.loose,
-                      child: Image.asset(
-                        Images.icStopBtn,
-                        height: Dimens.icDefaultHeight,
-                        width: Dimens.icDefaultHeight,
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                Text(
-                  "Rice cooker",
-                  style: AppTextStyles.textStyleCardTitleGreenText,
-                ),
-                Text(
-                  "This is a very long text to see whethere it will fit here or not and then lorem ipsum black fox jumps very big fat bus running through the city",
-                  style: AppTextStyles.textStyleCardBodyGreenText,
-                ),
+                const RegularVerticalMargin(),
+                buildTitleRow(title: taskModel.title!),
+                buildDescriptionRow(description: taskModel.description!)
               ],
             ),
           ),
-          InkWell(
-            onTap: () => {},
-            child: Container(
-              padding: Dimens.regularPagePadding,
-              height: Dimens.regularButtonHeight,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(Dimens.cardCornerRadius),
-                  color: ColorPalette.colorMarkCompleteButtonPurple),
-              child: Center(child: Text(Strings.markCompleteText)),
-            ),
+          Visibility(
+            visible: taskModel.isCompleted!,
+            child: buildButtonRow(),
           ),
         ],
       ),
+    );
+  }
+
+  InkWell buildButtonRow() {
+    return InkWell(
+      onTap: () => {},
+      child: Container(
+        padding: Dimens.regularButtonPadding,
+        height: Dimens.regularButtonHeight,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(Dimens.cardCornerRadius),
+            color: ColorPalette.colorMarkCompleteButtonPurple),
+        child: const Center(
+          child: Text(
+            Strings.markCompleteText,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Text buildDescriptionRow({required String description}) {
+    return Text(
+      description,
+      style: AppTextStyles.textStyleCardBodyGreenText,
+    );
+  }
+
+  Text buildTitleRow({
+    required String title,
+  }) {
+    return Text(
+      title,
+      style: AppTextStyles.textStyleCardTitleGreenText,
+    );
+  }
+
+  Row buildTimerAndButtonsRow({
+    required String timerValue,
+    required bool showPlayButton,
+    required bool showPauseButton,
+    required bool showStopButton,
+  }) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        Flexible(
+          fit: FlexFit.loose,
+          flex: 7,
+          child: Text(
+            timerValue,
+            style: AppTextStyles.textStyleCardTimerGreenText,
+          ),
+        ),
+        Visibility(
+          visible: showPlayButton,
+          child: Flexible(
+            fit: FlexFit.loose,
+            flex: 1,
+            child: Image.asset(
+              Images.icPlayBtn,
+              height: Dimens.icDefaultHeight,
+              width: Dimens.icDefaultHeight,
+            ),
+          ),
+        ),
+        Visibility(
+          visible: showPauseButton,
+          child: Flexible(
+            flex: 1,
+            fit: FlexFit.loose,
+            child: Image.asset(
+              Images.icPauseBtn,
+              height: Dimens.icDefaultHeight,
+              width: Dimens.icDefaultHeight,
+            ),
+          ),
+        ),
+        Visibility(
+          visible: showStopButton,
+          child: Flexible(
+            flex: 1,
+            fit: FlexFit.loose,
+            child: Image.asset(
+              Images.icStopBtn,
+              height: Dimens.icDefaultHeight,
+              width: Dimens.icDefaultHeight,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Row buildFinishedTextRow() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        Image.asset(
+          Images.icSoundWave,
+          height: Dimens.icDefaultHeight,
+          width: Dimens.icDefaultHeight,
+        ),
+        const Text(
+          "FINISHED",
+          style: AppTextStyles.textStyleCardTimerGreenText,
+        ),
+        Image.asset(
+          Images.icSoundWave,
+          height: Dimens.icDefaultHeight,
+          width: Dimens.icDefaultHeight,
+        ),
+      ],
     );
   }
 }
