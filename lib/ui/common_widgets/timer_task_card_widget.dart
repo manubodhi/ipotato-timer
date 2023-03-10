@@ -118,13 +118,13 @@ class TimerTaskCardWidget extends StatelessWidget {
             style: AppTextStyles.textStyleCardTimerGreenText,
           ),
         ),
-        InkWell(
-          onTap: () => onPlayButtonPressed!(),
-          child: Visibility(
-            visible: showPlayButton,
-            child: Flexible(
-              fit: FlexFit.loose,
-              flex: 1,
+        Visibility(
+          visible: showPlayButton,
+          child: Flexible(
+            fit: FlexFit.loose,
+            flex: 1,
+            child: InkWell(
+              onTap: () => onPlayButtonPressed!(),
               child: Image.asset(
                 Images.icPlayBtn,
                 height: Dimens.icDefaultHeight,
@@ -133,13 +133,13 @@ class TimerTaskCardWidget extends StatelessWidget {
             ),
           ),
         ),
-        InkWell(
-          onTap: () => onPauseButtonPressed!(),
-          child: Visibility(
-            visible: showPauseButton,
-            child: Flexible(
-              flex: 1,
-              fit: FlexFit.loose,
+        Visibility(
+          visible: showPauseButton,
+          child: Flexible(
+            flex: 1,
+            fit: FlexFit.loose,
+            child: InkWell(
+              onTap: () => onPauseButtonPressed!(),
               child: Image.asset(
                 Images.icPauseBtn,
                 height: Dimens.icDefaultHeight,
@@ -148,13 +148,13 @@ class TimerTaskCardWidget extends StatelessWidget {
             ),
           ),
         ),
-        InkWell(
-          onTap: () => onStopButtonPressed!(),
-          child: Visibility(
-            visible: showStopButton,
-            child: Flexible(
-              flex: 1,
-              fit: FlexFit.loose,
+        Visibility(
+          visible: showStopButton,
+          child: Flexible(
+            flex: 1,
+            fit: FlexFit.loose,
+            child: InkWell(
+              onTap: () => onStopButtonPressed!(),
               child: Image.asset(
                 Images.icStopBtn,
                 height: Dimens.icDefaultHeight,
