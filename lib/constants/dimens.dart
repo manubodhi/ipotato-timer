@@ -5,6 +5,8 @@ class Dimens {
   static const EdgeInsets regularPagePadding =
       EdgeInsets.fromLTRB(20, 20, 20, 20);
 
+  static const EdgeInsets dialogPadding = EdgeInsets.fromLTRB(32, 48, 64, 20);
+
   static const EdgeInsets regularButtonPadding =
       EdgeInsets.fromLTRB(10, 5, 10, 5);
 

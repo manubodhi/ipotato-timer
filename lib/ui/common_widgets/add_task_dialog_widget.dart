@@ -4,13 +4,18 @@ import 'package:ipotato/constants/app_text_styles.dart';
 import 'package:ipotato/constants/color_palette.dart';
 import 'package:ipotato/constants/dimens.dart';
 import 'package:ipotato/constants/strings.dart';
+import 'package:ipotato/constants/validations.dart';
+import 'package:ipotato/data/local/models/task_model.dart';
 import 'package:ipotato/ui/common_widgets/regular_horizontal_margin.dart';
+import 'package:ipotato/utils/utils.dart';
 
 class AddTaskDialogWidget extends StatefulWidget {
   final BuildContext context;
+  final Function({TaskModel? taskModel})? callback;
   const AddTaskDialogWidget({
     super.key,
     required this.context,
+    this.callback,
   });
 
   @override
@@ -18,47 +23,59 @@ class AddTaskDialogWidget extends StatefulWidget {
 }
 
 class _AddTaskDialogWidgetState extends State<AddTaskDialogWidget> {
-  Duration _selectedDuration = Duration(hours: 0, minutes: 0, seconds: 0);
+  Duration _selectedDuration = const Duration(hours: 0, minutes: 0, seconds: 0);
   String _time = "";
 
   late BuildContext _context;
 
-  final Key _formKey = const Key("form");
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  final TextEditingController _titleController = TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController();
+  late Function({TaskModel? taskModel})? _callback;
 
   @override
   void initState() {
     super.initState();
     _context = widget.context;
+    _callback = widget.callback;
   }
 
   @override
   Widget build(BuildContext context) {
     return Form(
       key: _formKey,
-      child: Column(
-        children: [
-          Padding(
-            padding: Dimens.regularPagePadding,
-            child: Column(
-              children: [
-                buildTitleFormField(),
-                const RegularVerticalMargin(),
-                buildDescriptionField(),
-                const RegularVerticalMargin(),
-                buildDurationRow(),
-                const RegularVerticalMargin(),
-              ],
+      child: SizedBox(
+        width: Utils.getScreenWidth(context) * 0.9,
+        child: Column(
+          children: [
+            Padding(
+              padding: Dimens.dialogPadding,
+              child: Column(
+                children: [
+                  buildTitleFormField(),
+                  const RegularVerticalMargin(),
+                  buildDescriptionField(),
+                  const RegularVerticalMargin(),
+                  buildDurationRow(),
+                  const RegularVerticalMargin(),
+                ],
+              ),
             ),
-          ),
-          DialogBottomButton(
-            methodCall: () => print("fdsfsf"),
-          ),
-        ],
+            DialogBottomButton(
+              methodCall: () => validateAndSubmit(context),
+            ),
+          ],
+        ),
       ),
     );
   }
 
   buildDurationRow() {
+    final hour = _selectedDuration.toString().split(":")[0];
+    final minute = _selectedDuration.toString().split(":")[1];
+    final second = _selectedDuration.toString().split(":")[2].split(".").first;
+
     return InkWell(
       onTap: () => _selectFutureTime(),
       child: Row(
@@ -77,21 +94,17 @@ class _AddTaskDialogWidgetState extends State<AddTaskDialogWidget> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   TimerHandBox(
-                    timeValue: _selectedDuration.toString().split(":")[0],
+                    timeValue: hour,
                     handTypeText: "HH",
                   ),
                   const TimeColonWidget(),
                   TimerHandBox(
-                    timeValue: _selectedDuration.toString().split(":")[1],
+                    timeValue: minute,
                     handTypeText: "MM",
                   ),
                   const TimeColonWidget(),
                   TimerHandBox(
-                    timeValue: _selectedDuration
-                        .toString()
-                        .split(":")[2]
-                        .split(".")
-                        .first,
+                    timeValue: second,
                     handTypeText: "SS",
                   ),
                 ],
@@ -104,21 +117,25 @@ class _AddTaskDialogWidgetState extends State<AddTaskDialogWidget> {
   }
 
   TaskInputFormField buildDescriptionField() {
-    return const TaskInputFormField(
+    return TaskInputFormField(
       labelText: "Description",
       minLines: 5,
       maxLines: 10,
+      controller: _titleController,
+      validator: Validations.validateEmpty,
     );
   }
 
   TaskInputFormField buildTitleFormField() {
-    return const TaskInputFormField(
+    return TaskInputFormField(
       labelText: "Title",
+      controller: _descriptionController,
+      validator: Validations.validateEmpty,
     );
   }
 
   _selectFutureTime() {
-    _showDialog(
+    _showTimePicker(
       context: _context,
       child: CupertinoTimerPicker(
         mode: CupertinoTimerPickerMode.hms,
@@ -132,7 +149,7 @@ class _AddTaskDialogWidgetState extends State<AddTaskDialogWidget> {
     );
   }
 
-  void _showDialog({
+  void _showTimePicker({
     required Widget child,
     required BuildContext context,
   }) {
@@ -154,6 +171,26 @@ class _AddTaskDialogWidgetState extends State<AddTaskDialogWidget> {
                 child: child,
               ),
             ));
+  }
+
+  validateAndSubmit(BuildContext dialogContext) {
+    FormState formState = _formKey.currentState!;
+    if (formState.validate()) {
+      if (_selectedDuration == Duration(hours: 0, minutes: 0, seconds: 0)) {
+      } else {
+        _callback!(
+          taskModel: TaskModel(
+            title: _titleController.text,
+            description: _descriptionController.text,
+            timerValue: _selectedDuration.toString(),
+          ),
+        );
+        Navigator.pop(context);
+      }
+    } else {
+      Utils.showSnackBar(
+          context: context, message: Strings.validationFailedText);
+    }
   }
 }
 
@@ -247,14 +284,17 @@ class TaskInputFormField extends StatelessWidget {
     required this.labelText,
     this.minLines = 1,
     this.maxLines = 10,
+    required this.controller,
+    this.validator,
   });
 
   final String labelText;
   final int minLines;
   final int maxLines;
+  final TextEditingController controller;
+  final String? Function(String?)? validator;
 
   final OutlineInputBorder taskInputBorder = const OutlineInputBorder(
-    //Outline border type for TextFeild
     borderRadius: BorderRadius.all(
       Radius.circular(10),
     ),
@@ -277,6 +317,8 @@ class TaskInputFormField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      controller: controller,
+      validator: validator,
       minLines: minLines,
       maxLines: maxLines,
       decoration: InputDecoration(

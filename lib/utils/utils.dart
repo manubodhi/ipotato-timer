@@ -17,6 +17,24 @@ class Utils {
     return MediaQuery.of(context).size.height;
   }
 
+  static String getHandsFromDurationString({required String durationString}) {
+    final hour = durationString.toString().split(":")[0];
+    final minute = durationString.toString().split(":")[1];
+    final second = durationString.toString().split(":")[2].split(".").first;
+    return "$hour:$minute:$second";
+  }
+
+  static Duration getDurationFromString({required String durationString}) {
+    final hour = durationString.split(":")[0];
+    final minute = durationString.split(":")[1];
+    final second = durationString.split(":")[2].split(".").first;
+    return Duration(
+      hours: int.parse(hour),
+      minutes: int.parse(minute),
+      seconds: int.parse(second),
+    );
+  }
+
   static showSnackBar(
       {required BuildContext context, required String message}) {
     final scaffoldMessenger = ScaffoldMessenger.of(context);

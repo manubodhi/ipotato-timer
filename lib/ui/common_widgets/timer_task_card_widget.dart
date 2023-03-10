@@ -11,9 +11,17 @@ class TimerTaskCardWidget extends StatelessWidget {
   const TimerTaskCardWidget({
     super.key,
     required this.taskModel,
+    this.onMarkCompletePressed,
+    this.onPlayButtonPressed,
+    this.onPauseButtonPressed,
+    this.onStopButtonPressed,
   });
 
   final TaskModel taskModel;
+  final VoidCallback? onMarkCompletePressed;
+  final VoidCallback? onPlayButtonPressed;
+  final VoidCallback? onPauseButtonPressed;
+  final VoidCallback? onStopButtonPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -49,16 +57,16 @@ class TimerTaskCardWidget extends StatelessWidget {
           ),
           Visibility(
             visible: taskModel.isCompleted!,
-            child: buildButtonRow(),
+            child: buildMarkCompleteButtonRow(),
           ),
         ],
       ),
     );
   }
 
-  InkWell buildButtonRow() {
+  InkWell buildMarkCompleteButtonRow() {
     return InkWell(
-      onTap: () => {},
+      onTap: () => onMarkCompletePressed!(),
       child: Container(
         padding: Dimens.regularButtonPadding,
         height: Dimens.regularButtonHeight,
@@ -96,6 +104,9 @@ class TimerTaskCardWidget extends StatelessWidget {
     required bool showPauseButton,
     required bool showStopButton,
   }) {
+    // final hour = timerValue.toString().split(":")[0];
+    // final minute = timerValue.toString().split(":")[1];
+    // final second = timerValue.toString().split(":")[2].split(".").first;
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
@@ -107,39 +118,48 @@ class TimerTaskCardWidget extends StatelessWidget {
             style: AppTextStyles.textStyleCardTimerGreenText,
           ),
         ),
-        Visibility(
-          visible: showPlayButton,
-          child: Flexible(
-            fit: FlexFit.loose,
-            flex: 1,
-            child: Image.asset(
-              Images.icPlayBtn,
-              height: Dimens.icDefaultHeight,
-              width: Dimens.icDefaultHeight,
+        InkWell(
+          onTap: () => onPlayButtonPressed!(),
+          child: Visibility(
+            visible: showPlayButton,
+            child: Flexible(
+              fit: FlexFit.loose,
+              flex: 1,
+              child: Image.asset(
+                Images.icPlayBtn,
+                height: Dimens.icDefaultHeight,
+                width: Dimens.icDefaultHeight,
+              ),
             ),
           ),
         ),
-        Visibility(
-          visible: showPauseButton,
-          child: Flexible(
-            flex: 1,
-            fit: FlexFit.loose,
-            child: Image.asset(
-              Images.icPauseBtn,
-              height: Dimens.icDefaultHeight,
-              width: Dimens.icDefaultHeight,
+        InkWell(
+          onTap: () => onPauseButtonPressed!(),
+          child: Visibility(
+            visible: showPauseButton,
+            child: Flexible(
+              flex: 1,
+              fit: FlexFit.loose,
+              child: Image.asset(
+                Images.icPauseBtn,
+                height: Dimens.icDefaultHeight,
+                width: Dimens.icDefaultHeight,
+              ),
             ),
           ),
         ),
-        Visibility(
-          visible: showStopButton,
-          child: Flexible(
-            flex: 1,
-            fit: FlexFit.loose,
-            child: Image.asset(
-              Images.icStopBtn,
-              height: Dimens.icDefaultHeight,
-              width: Dimens.icDefaultHeight,
+        InkWell(
+          onTap: () => onStopButtonPressed!(),
+          child: Visibility(
+            visible: showStopButton,
+            child: Flexible(
+              flex: 1,
+              fit: FlexFit.loose,
+              child: Image.asset(
+                Images.icStopBtn,
+                height: Dimens.icDefaultHeight,
+                width: Dimens.icDefaultHeight,
+              ),
             ),
           ),
         ),

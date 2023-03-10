@@ -10,4 +10,5 @@ class Strings {
 
   static const String addTaskText = "Add task";
   static const String iPotatoSplashText = "Ipotato Timer";
+  static const String validationFailedText = "Please enter required fields";
 }
