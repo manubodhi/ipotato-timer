@@ -23,7 +23,9 @@ class AddTaskDialogWidget extends StatefulWidget {
 }
 
 class _AddTaskDialogWidgetState extends State<AddTaskDialogWidget> {
-  Duration _selectedDuration = const Duration(hours: 0, minutes: 0, seconds: 0);
+  final Duration _zeroDuration =
+      const Duration(hours: 0, minutes: 0, seconds: 0);
+  late Duration _selectedDuration;
   String _time = "";
 
   late BuildContext _context;
@@ -34,11 +36,15 @@ class _AddTaskDialogWidgetState extends State<AddTaskDialogWidget> {
   final TextEditingController _descriptionController = TextEditingController();
   late Function({TaskModel? taskModel})? _callback;
 
+  late bool _isDurationNotSelected;
+
   @override
   void initState() {
     super.initState();
     _context = widget.context;
     _callback = widget.callback;
+    _selectedDuration = _zeroDuration;
+    _isDurationNotSelected = false;
   }
 
   @override
@@ -86,9 +92,15 @@ class _AddTaskDialogWidgetState extends State<AddTaskDialogWidget> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Text(
-                "Duration",
-                style: AppTextStyles.textStyleTimerHandText,
+              Text(
+                _isDurationNotSelected
+                    ? Strings.durationErrorText
+                    : Strings.durationText,
+                style: _isDurationNotSelected
+                    ? AppTextStyles.textStyleTimerHandText(
+                        color: ColorPalette.colorRedNegative,
+                      )
+                    : AppTextStyles.textStyleTimerHandText(),
               ),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -118,7 +130,7 @@ class _AddTaskDialogWidgetState extends State<AddTaskDialogWidget> {
 
   TaskInputFormField buildDescriptionField() {
     return TaskInputFormField(
-      labelText: "Description",
+      labelText: Strings.descriptionText,
       minLines: 5,
       maxLines: 10,
       controller: _titleController,
@@ -128,7 +140,7 @@ class _AddTaskDialogWidgetState extends State<AddTaskDialogWidget> {
 
   TaskInputFormField buildTitleFormField() {
     return TaskInputFormField(
-      labelText: "Title",
+      labelText: Strings.titleText,
       controller: _descriptionController,
       validator: Validations.validateEmpty,
     );
@@ -176,7 +188,10 @@ class _AddTaskDialogWidgetState extends State<AddTaskDialogWidget> {
   validateAndSubmit(BuildContext dialogContext) {
     FormState formState = _formKey.currentState!;
     if (formState.validate()) {
-      if (_selectedDuration == Duration(hours: 0, minutes: 0, seconds: 0)) {
+      if (_selectedDuration == _zeroDuration) {
+        setState(() {
+          _isDurationNotSelected = true;
+        });
       } else {
         _callback!(
           taskModel: TaskModel(
@@ -271,7 +286,7 @@ class TimerHandBox extends StatelessWidget {
         ),
         Text(
           handTypeText,
-          style: AppTextStyles.textStyleTimerHandText,
+          style: AppTextStyles.textStyleTimerHandText(),
         ),
       ],
     );

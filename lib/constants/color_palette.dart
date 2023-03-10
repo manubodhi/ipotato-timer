@@ -13,6 +13,7 @@ class ColorPalette {
   static const colorTimerTextGreen = Color(0xFF006782);
   static const colorTimerBoxGreen = Color(0xFFA7F5A7);
   static const colorTimerHandGrey = Color(0xFF40484C);
+  static const colorRedNegative = Color(0xFFEE4141);
 
   static const MaterialColor colorSwatchAccentGreen = MaterialColor(
     0xFF216C2E,

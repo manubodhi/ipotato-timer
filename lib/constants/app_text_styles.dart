@@ -56,9 +56,9 @@ class AppTextStyles {
     fontWeight: FontWeight.w400,
   );
 
-  static const TextStyle textStyleTimerHandText = TextStyle(
-    color: ColorPalette.colorTimerHandGrey,
-    fontSize: 11,
-    fontWeight: FontWeight.w400,
-  );
+  static TextStyle textStyleTimerHandText({Color? color}) => TextStyle(
+        color: color ?? ColorPalette.colorTimerHandGrey,
+        fontSize: 11,
+        fontWeight: FontWeight.w400,
+      );
 }

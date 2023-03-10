@@ -1,4 +1,7 @@
 import 'package:get_it/get_it.dart';
+import 'package:ipotato/data/local/db/database_helper.dart';
+import 'package:ipotato/data/local/db/database_helper_impl.dart';
+import 'package:ipotato/data/local/db/task_db.dart';
 import 'package:ipotato/data/local/prefs/shared_pref_helper.dart';
 import 'package:ipotato/data/local/prefs/shared_pref_helper_impl.dart';
 import 'package:ipotato/data/repos/task_repository.dart';
@@ -14,6 +17,18 @@ class AppInjector {
       () => SharedPrefHelperImpl(pref: sharedPreferences),
     );
 
-    locator.registerLazySingleton<TaskRepository>(() => TaskRepositoryImpl());
+    final taskDatabse = TaskDb();
+
+    locator.registerLazySingleton<DatabaseHelper>(
+      () => DatabaseHelperImpl(
+        taskDbInstance: taskDatabse,
+      ),
+    );
+
+    locator.registerLazySingleton<TaskRepository>(
+      () => TaskRepositoryImpl(
+        databaseHelperInstance: locator(),
+      ),
+    );
   }
 }
