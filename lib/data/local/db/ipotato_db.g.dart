@@ -1,13 +1,14 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'task_db.dart';
+part of 'ipotato_db.dart';
 
 // ignore_for_file: type=lint
-class $TaskDbTable extends TaskDb with TableInfo<$TaskDbTable, TaskDbData> {
+class $TaskListTable extends TaskList
+    with TableInfo<$TaskListTable, SingleTask> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $TaskDbTable(this.attachedDatabase, [this._alias]);
+  $TaskListTable(this.attachedDatabase, [this._alias]);
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<int> id = GeneratedColumn<int>(
@@ -41,11 +42,11 @@ class $TaskDbTable extends TaskDb with TableInfo<$TaskDbTable, TaskDbData> {
   List<GeneratedColumn> get $columns =>
       [id, title, description, lastKnownDuration];
   @override
-  String get aliasedName => _alias ?? 'task_db';
+  String get aliasedName => _alias ?? 'task_list';
   @override
-  String get actualTableName => 'task_db';
+  String get actualTableName => 'task_list';
   @override
-  VerificationContext validateIntegrity(Insertable<TaskDbData> instance,
+  VerificationContext validateIntegrity(Insertable<SingleTask> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
@@ -80,9 +81,9 @@ class $TaskDbTable extends TaskDb with TableInfo<$TaskDbTable, TaskDbData> {
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  TaskDbData map(Map<String, dynamic> data, {String? tablePrefix}) {
+  SingleTask map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return TaskDbData(
+    return SingleTask(
       id: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
       title: attachedDatabase.typeMapping
@@ -95,17 +96,17 @@ class $TaskDbTable extends TaskDb with TableInfo<$TaskDbTable, TaskDbData> {
   }
 
   @override
-  $TaskDbTable createAlias(String alias) {
-    return $TaskDbTable(attachedDatabase, alias);
+  $TaskListTable createAlias(String alias) {
+    return $TaskListTable(attachedDatabase, alias);
   }
 }
 
-class TaskDbData extends DataClass implements Insertable<TaskDbData> {
+class SingleTask extends DataClass implements Insertable<SingleTask> {
   final int id;
   final String title;
   final String description;
   final String lastKnownDuration;
-  const TaskDbData(
+  const SingleTask(
       {required this.id,
       required this.title,
       required this.description,
@@ -120,8 +121,8 @@ class TaskDbData extends DataClass implements Insertable<TaskDbData> {
     return map;
   }
 
-  TaskDbCompanion toCompanion(bool nullToAbsent) {
-    return TaskDbCompanion(
+  TaskListCompanion toCompanion(bool nullToAbsent) {
+    return TaskListCompanion(
       id: Value(id),
       title: Value(title),
       description: Value(description),
@@ -129,10 +130,10 @@ class TaskDbData extends DataClass implements Insertable<TaskDbData> {
     );
   }
 
-  factory TaskDbData.fromJson(Map<String, dynamic> json,
+  factory SingleTask.fromJson(Map<String, dynamic> json,
       {ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
-    return TaskDbData(
+    return SingleTask(
       id: serializer.fromJson<int>(json['id']),
       title: serializer.fromJson<String>(json['title']),
       description: serializer.fromJson<String>(json['description']),
@@ -150,12 +151,12 @@ class TaskDbData extends DataClass implements Insertable<TaskDbData> {
     };
   }
 
-  TaskDbData copyWith(
+  SingleTask copyWith(
           {int? id,
           String? title,
           String? description,
           String? lastKnownDuration}) =>
-      TaskDbData(
+      SingleTask(
         id: id ?? this.id,
         title: title ?? this.title,
         description: description ?? this.description,
@@ -163,7 +164,7 @@ class TaskDbData extends DataClass implements Insertable<TaskDbData> {
       );
   @override
   String toString() {
-    return (StringBuffer('TaskDbData(')
+    return (StringBuffer('SingleTask(')
           ..write('id: $id, ')
           ..write('title: $title, ')
           ..write('description: $description, ')
@@ -177,25 +178,25 @@ class TaskDbData extends DataClass implements Insertable<TaskDbData> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is TaskDbData &&
+      (other is SingleTask &&
           other.id == this.id &&
           other.title == this.title &&
           other.description == this.description &&
           other.lastKnownDuration == this.lastKnownDuration);
 }
 
-class TaskDbCompanion extends UpdateCompanion<TaskDbData> {
+class TaskListCompanion extends UpdateCompanion<SingleTask> {
   final Value<int> id;
   final Value<String> title;
   final Value<String> description;
   final Value<String> lastKnownDuration;
-  const TaskDbCompanion({
+  const TaskListCompanion({
     this.id = const Value.absent(),
     this.title = const Value.absent(),
     this.description = const Value.absent(),
     this.lastKnownDuration = const Value.absent(),
   });
-  TaskDbCompanion.insert({
+  TaskListCompanion.insert({
     this.id = const Value.absent(),
     required String title,
     required String description,
@@ -203,7 +204,7 @@ class TaskDbCompanion extends UpdateCompanion<TaskDbData> {
   })  : title = Value(title),
         description = Value(description),
         lastKnownDuration = Value(lastKnownDuration);
-  static Insertable<TaskDbData> custom({
+  static Insertable<SingleTask> custom({
     Expression<int>? id,
     Expression<String>? title,
     Expression<String>? description,
@@ -217,12 +218,12 @@ class TaskDbCompanion extends UpdateCompanion<TaskDbData> {
     });
   }
 
-  TaskDbCompanion copyWith(
+  TaskListCompanion copyWith(
       {Value<int>? id,
       Value<String>? title,
       Value<String>? description,
       Value<String>? lastKnownDuration}) {
-    return TaskDbCompanion(
+    return TaskListCompanion(
       id: id ?? this.id,
       title: title ?? this.title,
       description: description ?? this.description,
@@ -250,7 +251,7 @@ class TaskDbCompanion extends UpdateCompanion<TaskDbData> {
 
   @override
   String toString() {
-    return (StringBuffer('TaskDbCompanion(')
+    return (StringBuffer('TaskListCompanion(')
           ..write('id: $id, ')
           ..write('title: $title, ')
           ..write('description: $description, ')
@@ -262,10 +263,10 @@ class TaskDbCompanion extends UpdateCompanion<TaskDbData> {
 
 abstract class _$IPotatoDatabase extends GeneratedDatabase {
   _$IPotatoDatabase(QueryExecutor e) : super(e);
-  late final $TaskDbTable taskDb = $TaskDbTable(this);
+  late final $TaskListTable taskList = $TaskListTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
-  List<DatabaseSchemaEntity> get allSchemaEntities => [taskDb];
+  List<DatabaseSchemaEntity> get allSchemaEntities => [taskList];
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:ipotato/app/app.dart';
-import 'package:ipotato/data/local/db/task_db.dart';
+import 'package:ipotato/data/local/db/ipotato_db.dart';
 import 'package:ipotato/di/injector.dart';
 
 void main() async {

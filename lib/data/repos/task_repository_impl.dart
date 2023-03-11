@@ -1,22 +1,27 @@
 import 'package:ipotato/data/local/db/database_helper.dart';
-import 'package:ipotato/data/local/db/database_helper_impl.dart';
+import 'package:ipotato/data/local/models/task_model.dart';
 import 'package:ipotato/data/repos/task_repository.dart';
 
 class TaskRepositoryImpl extends TaskRepository {
-  final DatabaseHelperImpl databaseHelperInstance;
+  final DatabaseHelper databaseHelperInstance;
 
   TaskRepositoryImpl({
     required this.databaseHelperInstance,
   });
 
   @override
-  void createTask<TaskModel>() {
-    // TODO: implement createTask
+  Future<void> createTask({required TaskModel task}) async {
+    await databaseHelperInstance.insertTask(taskModel: task);
   }
 
   @override
-  void deleteTask() {
-    // TODO: implement deleteTask
+  Future<void> deleteTask({required TaskModel task}) async {
+    await databaseHelperInstance.deleteTask(taskModel: task);
+  }
+
+  @override
+  Future<List<TaskModel>> getAllTasks() async {
+    return await databaseHelperInstance.getAllTasks();
   }
 
   @override

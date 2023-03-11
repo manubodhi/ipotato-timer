@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:ipotato/constants/app_text_styles.dart';
-import 'package:ipotato/constants/dimens.dart';
 import 'package:ipotato/constants/images.dart';
 import 'package:ipotato/constants/strings.dart';
 import 'package:ipotato/routes/route_names.dart';

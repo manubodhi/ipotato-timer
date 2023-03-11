@@ -4,6 +4,8 @@ import 'package:ipotato/constants/color_palette.dart';
 import 'package:ipotato/constants/dimens.dart';
 import 'package:ipotato/constants/strings.dart';
 import 'package:ipotato/data/local/models/task_model.dart';
+import 'package:ipotato/data/repos/task_repository.dart';
+import 'package:ipotato/di/injector.dart';
 import 'package:ipotato/stores/task_list_store.dart';
 import 'package:ipotato/ui/common_widgets/add_task_dialog_widget.dart';
 import 'package:ipotato/ui/common_widgets/timer_task_card_widget.dart';
@@ -18,8 +20,11 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final taskList = Provider.of<TaskListStore>(context);
 
-    addTask(TaskModel? taskModel) {
+    final TaskRepository taskRepo = locator<TaskRepository>();
+
+    addTask(TaskModel? taskModel) async {
       taskList.addTask(taskModel!);
+      await taskRepo.createTask(task: taskModel);
     }
 
     return Provider<TaskListStore>(
