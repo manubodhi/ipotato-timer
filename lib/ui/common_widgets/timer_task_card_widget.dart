@@ -7,6 +7,8 @@ import 'package:ipotato/constants/dimens.dart';
 import 'package:ipotato/constants/images.dart';
 import 'package:ipotato/constants/strings.dart';
 import 'package:ipotato/data/local/models/task_model.dart';
+import 'package:ipotato/data/repos/task_repository.dart';
+import 'package:ipotato/di/injector.dart';
 import 'package:ipotato/ui/common_widgets/regular_horizontal_margin.dart';
 import 'package:ipotato/utils/utils.dart';
 
@@ -28,7 +30,6 @@ class TimerTaskCardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    log('at card $taskModel');
     return Card(
       color: ColorPalette.colorCardBlue,
       margin: Dimens.cardHorizontalMargin,
@@ -180,7 +181,7 @@ class TimerTaskCardWidget extends StatelessWidget {
           width: Dimens.icDefaultHeight,
         ),
         const Text(
-          "FINISHED",
+          Strings.finishedText,
           style: AppTextStyles.textStyleCardTimerGreenText,
         ),
         Image.asset(

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:ipotato/data/local/models/task_model.dart';
 import 'package:ipotato/data/repos/task_repository.dart';
@@ -84,8 +85,13 @@ abstract class _TaskStore with Store {
 
     countDownTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (duration.inSeconds == 0) {
+        log("running duration");
         isCompleted = true;
         updateInDb();
+
+        taskRepo.playSong(description: description, title: title);
+
+        countDownTimer?.cancel();
       } else {
         duration = duration - const Duration(seconds: 1);
       }
@@ -96,7 +102,9 @@ abstract class _TaskStore with Store {
   void stop() {
     if (isRunning) {
       isStopped = true;
+      isRunning = false;
     }
+    taskRepo.stopSong();
     countDownTimer?.cancel();
   }
 

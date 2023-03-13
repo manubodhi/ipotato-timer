@@ -7,6 +7,7 @@ class Strings {
   static const String potatoTimerText = "Potato Timer";
 
   static const String markCompleteText = "MARK COMPLETE";
+  static const String finishedText = "FINISHED";
 
   static const String addTaskText = "Add task";
   static const String iPotatoSplashText = "Ipotato Timer";

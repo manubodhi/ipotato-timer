@@ -22,10 +22,6 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final taskList = Provider.of<TaskListStore>(context);
 
-    TaskRepository repo = locator<TaskRepository>();
-
-    // repo.deleteAllTasks();
-
     taskList.reinstateStateFromDrift();
 
     return Provider<TaskListStore>(
@@ -69,8 +65,12 @@ class HomeScreen extends StatelessWidget {
                   onMarkCompletePressed: () {
                     taskList.removeTask(task);
                   },
-                  onPauseButtonPressed: () => task.pause(),
-                  onPlayButtonPressed: () => task.start(),
+                  onPauseButtonPressed: () {
+                    task.pause();
+                  },
+                  onPlayButtonPressed: () {
+                    task.start();
+                  },
                   onStopButtonPressed: () {
                     task.stop();
                     taskList.removeTask(task);

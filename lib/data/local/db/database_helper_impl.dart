@@ -49,7 +49,6 @@ class DatabaseHelperImpl extends DatabaseHelper {
 
   @override
   Future<int> insertTask({required TaskModel taskModel}) async {
-    log('timer value ${taskModel.timerValue}');
     return dbInstance.insertTask(TaskListCompanion.insert(
       title: taskModel.title!,
       description: taskModel.description!,

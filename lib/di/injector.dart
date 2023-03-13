@@ -1,3 +1,4 @@
+import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:get_it/get_it.dart';
 import 'package:ipotato/data/local/db/database_helper.dart';
 import 'package:ipotato/data/local/db/database_helper_impl.dart';
@@ -29,6 +30,7 @@ class AppInjector {
     locator.registerLazySingleton<TaskRepository>(
       () => TaskRepositoryImpl(
         databaseHelperInstance: locator(),
+        assetsAudioPlayer: AssetsAudioPlayer(),
       ),
     );
   }

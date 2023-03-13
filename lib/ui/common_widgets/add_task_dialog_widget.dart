@@ -133,7 +133,7 @@ class _AddTaskDialogWidgetState extends State<AddTaskDialogWidget> {
       labelText: Strings.descriptionText,
       minLines: 5,
       maxLines: 10,
-      controller: _titleController,
+      controller: _descriptionController,
       validator: Validations.validateEmpty,
     );
   }
@@ -141,7 +141,7 @@ class _AddTaskDialogWidgetState extends State<AddTaskDialogWidget> {
   TaskInputFormField buildTitleFormField() {
     return TaskInputFormField(
       labelText: Strings.titleText,
-      controller: _descriptionController,
+      controller: _titleController,
       validator: Validations.validateEmpty,
     );
   }

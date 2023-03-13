@@ -90,7 +90,8 @@ abstract class _TaskListStore with Store {
 
   @action
   void removeTask(TaskStore taskStore) {
-    taskList.removeWhere((element) => element == taskStore);
+    taskStore.stop();
+    taskList.removeWhere((element) => element.id == taskStore.id);
     taskRepo.deleteTask(
         task: TaskModel(
       description: taskStore.description,
@@ -119,7 +120,6 @@ abstract class _TaskListStore with Store {
     if (savedTasks.isNotEmpty) {
       for (TaskModel task in savedTasks) {
         if (!taskList.map((element) => element.id).contains(task.id)) {
-          log('at store $task');
           final taskItem = TaskStore(
               id: task.id!,
               title: task.title!,
