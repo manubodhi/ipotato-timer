@@ -51,10 +51,9 @@ class Utils {
     required Widget body,
     Function()? methodCall,
   }) {
-    // set up the AlertDialog
     SimpleDialog dialog = SimpleDialog(
       backgroundColor: ColorPalette.colorCardBlue,
-      contentPadding: EdgeInsets.all(0),
+      contentPadding: const EdgeInsets.all(0),
       title: Text(
         title,
         style: AppTextStyles.textStylePopupTitleGreyText,
@@ -68,7 +67,6 @@ class Utils {
       ],
     );
 
-    // show the dialog
     showDialog(
       context: context,
       builder: (BuildContext context) {

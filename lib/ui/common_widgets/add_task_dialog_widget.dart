@@ -198,6 +198,11 @@ class _AddTaskDialogWidgetState extends State<AddTaskDialogWidget> {
             title: _titleController.text,
             description: _descriptionController.text,
             timerValue: _selectedDuration.toString(),
+            isStarted: true,
+            isCompleted: false,
+            isResumed: false,
+            isPaused: false,
+            lastKnownDuration: _selectedDuration.toString(),
           ),
         );
         Navigator.pop(context);

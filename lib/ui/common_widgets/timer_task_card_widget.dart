@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:ipotato/constants/app_text_styles.dart';
 import 'package:ipotato/constants/color_palette.dart';
@@ -6,6 +8,7 @@ import 'package:ipotato/constants/images.dart';
 import 'package:ipotato/constants/strings.dart';
 import 'package:ipotato/data/local/models/task_model.dart';
 import 'package:ipotato/ui/common_widgets/regular_horizontal_margin.dart';
+import 'package:ipotato/utils/utils.dart';
 
 class TimerTaskCardWidget extends StatelessWidget {
   const TimerTaskCardWidget({
@@ -25,6 +28,7 @@ class TimerTaskCardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    log('at card $taskModel');
     return Card(
       color: ColorPalette.colorCardBlue,
       margin: Dimens.cardHorizontalMargin,
@@ -43,9 +47,8 @@ class TimerTaskCardWidget extends StatelessWidget {
                     ? buildFinishedTextRow()
                     : buildTimerAndButtonsRow(
                         timerValue: taskModel.timerValue!,
-                        showPauseButton: taskModel.isStarted!,
-                        showPlayButton:
-                            !taskModel.isStarted! || taskModel.isPaused!,
+                        showPauseButton: !taskModel.isPaused!,
+                        showPlayButton: taskModel.isPaused!,
                         showStopButton:
                             taskModel.isPaused! || taskModel.isStarted!,
                       ),
@@ -114,7 +117,7 @@ class TimerTaskCardWidget extends StatelessWidget {
           fit: FlexFit.loose,
           flex: 7,
           child: Text(
-            timerValue,
+            Utils.getHandsFromDurationString(durationString: timerValue),
             style: AppTextStyles.textStyleCardTimerGreenText,
           ),
         ),

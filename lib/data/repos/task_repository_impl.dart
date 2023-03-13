@@ -1,4 +1,5 @@
 import 'package:ipotato/data/local/db/database_helper.dart';
+import 'package:ipotato/data/local/db/ipotato_db.dart';
 import 'package:ipotato/data/local/models/task_model.dart';
 import 'package:ipotato/data/repos/task_repository.dart';
 
@@ -10,8 +11,8 @@ class TaskRepositoryImpl extends TaskRepository {
   });
 
   @override
-  Future<void> createTask({required TaskModel task}) async {
-    await databaseHelperInstance.insertTask(taskModel: task);
+  Future<int> insertTask({required TaskModel task}) async {
+    return await databaseHelperInstance.insertTask(taskModel: task);
   }
 
   @override
@@ -25,27 +26,24 @@ class TaskRepositoryImpl extends TaskRepository {
   }
 
   @override
-  void markAsCompleteTask() {
-    // TODO: implement markAsCompleteTask
+  Future<TaskModel> getSingleTasks({required int id}) {
+    return databaseHelperInstance.getSingleTask(id: id);
   }
 
   @override
-  void pauseTask() {
-    // TODO: implement pauseTask
+  Future<void> deleteAllTasks() async {
+    final savedTasks = await getAllTasks();
+
+    if (savedTasks.isNotEmpty) {
+      for (TaskModel task in savedTasks) {
+        deleteTask(task: task);
+      }
+    }
   }
 
   @override
-  void resumeTask() {
-    // TODO: implement resumeTask
-  }
-
-  @override
-  void startTask() {
-    // TODO: implement startTask
-  }
-
-  @override
-  void stopTask() {
-    // TODO: implement stopTask
+  Future<void> updateTask({required TaskModel task}) async {
+    await databaseHelperInstance.updateTask(
+        dbTaskModel: SingleTask.fromJson(task.toJson()));
   }
 }

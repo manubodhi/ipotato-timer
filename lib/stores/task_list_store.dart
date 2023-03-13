@@ -1,5 +1,10 @@
+import 'dart:async';
+import 'dart:developer';
+
 import 'package:ipotato/constants/enums.dart';
 import 'package:ipotato/data/local/models/task_model.dart';
+import 'package:ipotato/data/repos/task_repository.dart';
+import 'package:ipotato/di/injector.dart';
 import 'package:ipotato/stores/task_store.dart';
 import 'package:ipotato/utils/utils.dart';
 import 'package:mobx/mobx.dart';
@@ -9,6 +14,8 @@ part 'task_list_store.g.dart';
 class TaskListStore = _TaskListStore with _$TaskListStore;
 
 abstract class _TaskListStore with Store {
+  final TaskRepository taskRepo = locator<TaskRepository>();
+
   @observable
   ObservableList<TaskStore> taskList = ObservableList<TaskStore>();
 
@@ -30,13 +37,13 @@ abstract class _TaskListStore with Store {
   bool get hasPendingTasks => pendingTasks.isNotEmpty;
 
   @computed
-  String get tasksTitles {
+  ObservableList<int?> get tasksIds {
     if (taskList.isEmpty) {
-      return "There are no tasks here. Please use the below button to create one.";
+      return ObservableList.of(List.empty());
     }
 
-    final suffix = pendingTasks.length == 1 ? "task" : "tasks";
-    return '${pendingTasks.length} pending $suffix, ${completedTasks.length} completed';
+    var idList = ObservableList.of(taskList.map((task) => task.id));
+    return idList;
   }
 
   @computed
@@ -46,33 +53,56 @@ abstract class _TaskListStore with Store {
         return pendingTasks;
       case VisibilityFilter.completed:
         return completedTasks;
+      case VisibilityFilter.all:
+        return ObservableList.of([...completedTasks, ...pendingTasks]);
       default:
         return taskList;
     }
   }
 
-  @computed
-  bool get canRemoveAllCompleted =>
-      hasCompletedTasks && filter != VisibilityFilter.pending;
-
-  @computed
-  bool get canMarkAllCompleted =>
-      hasPendingTasks && filter != VisibilityFilter.completed;
-
   @action
-  void addTask(TaskModel taskModel) {
+  Future addTask(TaskModel taskModel) async {
+    final taskId = await taskRepo.insertTask(task: taskModel);
+
     final task = TaskStore(
-        taskModel.title!,
-        taskModel.description!,
-        taskModel.timerValue!,
-        Utils.getDurationFromString(durationString: taskModel.timerValue!));
+        id: taskId,
+        title: taskModel.title!,
+        description: taskModel.description!,
+        lastKnownDuration: taskModel.lastKnownDuration!,
+        timerValue: taskModel.timerValue!,
+        isCompleted: taskModel.isCompleted!,
+        isPaused: taskModel.isPaused!,
+        isResumed: taskModel.isResumed!,
+        isStarted: taskModel.isStarted!,
+        duration: Utils.getDurationFromString(
+            durationString: taskModel.lastKnownDuration!),
+        countDownTimer: Timer(
+            Utils.getDurationFromString(
+                durationString: taskModel.lastKnownDuration!),
+            () {}));
 
     taskList.add(task);
+
+    if (taskModel.isStarted!) {
+      task.start();
+    }
   }
 
   @action
   void removeTask(TaskStore taskStore) {
     taskList.removeWhere((element) => element == taskStore);
+    taskRepo.deleteTask(
+        task: TaskModel(
+      description: taskStore.description,
+      id: taskStore.id,
+      isCompleted: taskStore.isCompleted,
+      isPaused: taskStore.isPaused,
+      isResumed: taskStore.isResumed,
+      isStarted: taskStore.isStarted,
+      lastKnownDuration: taskStore.lastKnownDuration,
+      timerValue: taskStore.timerValue,
+      title: taskStore.title,
+    ));
   }
 
   @action
@@ -83,10 +113,33 @@ abstract class _TaskListStore with Store {
     taskList.removeWhere((element) => element.isCompleted);
   }
 
-  @action
-  void markAllAsCompleted() {
-    for (final task in taskList) {
-      task.isCompleted = true;
+  Future<void> reinstateStateFromDrift() async {
+    final savedTasks = await taskRepo.getAllTasks();
+
+    if (savedTasks.isNotEmpty) {
+      for (TaskModel task in savedTasks) {
+        if (!taskList.map((element) => element.id).contains(task.id)) {
+          log('at store $task');
+          final taskItem = TaskStore(
+              id: task.id!,
+              title: task.title!,
+              description: task.description!,
+              lastKnownDuration: task.lastKnownDuration!,
+              timerValue: task.timerValue!,
+              isCompleted: task.isCompleted!,
+              isPaused: task.isPaused!,
+              isResumed: task.isResumed!,
+              isStarted: task.isStarted!,
+              duration: Utils.getDurationFromString(
+                  durationString: task.lastKnownDuration!),
+              countDownTimer: Timer(
+                  Utils.getDurationFromString(
+                      durationString: task.lastKnownDuration!),
+                  () {}));
+
+          taskList.add(taskItem);
+        }
+      }
     }
   }
 }

@@ -37,33 +37,19 @@ mixin _$TaskListStore on _TaskListStore, Store {
       (_$hasPendingTasksComputed ??= Computed<bool>(() => super.hasPendingTasks,
               name: '_TaskListStore.hasPendingTasks'))
           .value;
-  Computed<String>? _$tasksTitlesComputed;
+  Computed<ObservableList<int?>>? _$tasksIdsComputed;
 
   @override
-  String get tasksTitles =>
-      (_$tasksTitlesComputed ??= Computed<String>(() => super.tasksTitles,
-              name: '_TaskListStore.tasksTitles'))
-          .value;
+  ObservableList<int?> get tasksIds => (_$tasksIdsComputed ??=
+          Computed<ObservableList<int?>>(() => super.tasksIds,
+              name: '_TaskListStore.tasksIds'))
+      .value;
   Computed<ObservableList<TaskStore>>? _$visibleTasksComputed;
 
   @override
   ObservableList<TaskStore> get visibleTasks => (_$visibleTasksComputed ??=
           Computed<ObservableList<TaskStore>>(() => super.visibleTasks,
               name: '_TaskListStore.visibleTasks'))
-      .value;
-  Computed<bool>? _$canRemoveAllCompletedComputed;
-
-  @override
-  bool get canRemoveAllCompleted => (_$canRemoveAllCompletedComputed ??=
-          Computed<bool>(() => super.canRemoveAllCompleted,
-              name: '_TaskListStore.canRemoveAllCompleted'))
-      .value;
-  Computed<bool>? _$canMarkAllCompletedComputed;
-
-  @override
-  bool get canMarkAllCompleted => (_$canMarkAllCompletedComputed ??=
-          Computed<bool>(() => super.canMarkAllCompleted,
-              name: '_TaskListStore.canMarkAllCompleted'))
       .value;
 
   late final _$taskListAtom =
@@ -98,19 +84,16 @@ mixin _$TaskListStore on _TaskListStore, Store {
     });
   }
 
-  late final _$_TaskListStoreActionController =
-      ActionController(name: '_TaskListStore', context: context);
+  late final _$addTaskAsyncAction =
+      AsyncAction('_TaskListStore.addTask', context: context);
 
   @override
-  void addTask(TaskModel taskModel) {
-    final _$actionInfo = _$_TaskListStoreActionController.startAction(
-        name: '_TaskListStore.addTask');
-    try {
-      return super.addTask(taskModel);
-    } finally {
-      _$_TaskListStoreActionController.endAction(_$actionInfo);
-    }
+  Future<dynamic> addTask(TaskModel taskModel) {
+    return _$addTaskAsyncAction.run(() => super.addTask(taskModel));
   }
+
+  late final _$_TaskListStoreActionController =
+      ActionController(name: '_TaskListStore', context: context);
 
   @override
   void removeTask(TaskStore taskStore) {
@@ -146,17 +129,6 @@ mixin _$TaskListStore on _TaskListStore, Store {
   }
 
   @override
-  void markAllAsCompleted() {
-    final _$actionInfo = _$_TaskListStoreActionController.startAction(
-        name: '_TaskListStore.markAllAsCompleted');
-    try {
-      return super.markAllAsCompleted();
-    } finally {
-      _$_TaskListStoreActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
   String toString() {
     return '''
 taskList: ${taskList},
@@ -165,10 +137,8 @@ pendingTasks: ${pendingTasks},
 completedTasks: ${completedTasks},
 hasCompletedTasks: ${hasCompletedTasks},
 hasPendingTasks: ${hasPendingTasks},
-tasksTitles: ${tasksTitles},
-visibleTasks: ${visibleTasks},
-canRemoveAllCompleted: ${canRemoveAllCompleted},
-canMarkAllCompleted: ${canMarkAllCompleted}
+tasksIds: ${tasksIds},
+visibleTasks: ${visibleTasks}
     ''';
   }
 }

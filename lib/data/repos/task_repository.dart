@@ -1,12 +1,10 @@
 import 'package:ipotato/data/local/models/task_model.dart';
 
 abstract class TaskRepository {
-  Future<void> createTask({required TaskModel task});
+  Future<int> insertTask({required TaskModel task});
+  Future<void> updateTask({required TaskModel task});
   Future<void> deleteTask({required TaskModel task});
   Future<List<TaskModel>> getAllTasks();
-  void startTask();
-  void pauseTask();
-  void resumeTask();
-  void stopTask();
-  void markAsCompleteTask();
+  Future<void> deleteAllTasks();
+  Future<TaskModel> getSingleTasks({required int id});
 }

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:ipotato/constants/app_text_styles.dart';
 import 'package:ipotato/constants/color_palette.dart';
@@ -20,12 +22,11 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final taskList = Provider.of<TaskListStore>(context);
 
-    final TaskRepository taskRepo = locator<TaskRepository>();
+    TaskRepository repo = locator<TaskRepository>();
 
-    addTask(TaskModel? taskModel) async {
-      taskList.addTask(taskModel!);
-      await taskRepo.createTask(task: taskModel);
-    }
+    // repo.deleteAllTasks();
+
+    taskList.reinstateStateFromDrift();
 
     return Provider<TaskListStore>(
       create: (_) => TaskListStore(),
@@ -52,7 +53,7 @@ class HomeScreen extends StatelessWidget {
             title: "Add task",
             body: AddTaskDialogWidget(
               context: context,
-              callback: ({taskModel}) => addTask(taskModel),
+              callback: ({taskModel}) => taskList.addTask(taskModel!),
             ),
           ),
         ),
@@ -63,22 +64,27 @@ class HomeScreen extends StatelessWidget {
             itemCount: taskList.visibleTasks.length,
             itemBuilder: (_, index) {
               final task = taskList.visibleTasks[index];
-              task.start();
               return Observer(
                 builder: (_) => TimerTaskCardWidget(
-                  onMarkCompletePressed: () => taskList.removeTask(task),
+                  onMarkCompletePressed: () {
+                    taskList.removeTask(task);
+                  },
                   onPauseButtonPressed: () => task.pause(),
                   onPlayButtonPressed: () => task.start(),
-                  onStopButtonPressed: () => task.stop(),
+                  onStopButtonPressed: () {
+                    task.stop();
+                    taskList.removeTask(task);
+                  },
                   taskModel: TaskModel(
+                    id: task.id,
                     title: task.title,
                     description: task.description,
                     timerValue: task.time,
+                    lastKnownDuration: task.lastKnownDuration,
                     isCompleted: task.isCompleted,
-                    isPaused: !task.isRunning,
+                    isPaused: task.isPaused,
                     isResumed: task.isRunning,
-                    isStopped: !task.isRunning,
-                    isStarted: task.isRunning,
+                    isStarted: task.isStarted,
                   ),
                 ),
               );
