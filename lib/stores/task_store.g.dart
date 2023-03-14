@@ -16,6 +16,22 @@ mixin _$TaskStore on _TaskStore, Store {
           Computed<String>(() => super.time, name: '_TaskStore.time'))
       .value;
 
+  late final _$isRunningAtom =
+      Atom(name: '_TaskStore.isRunning', context: context);
+
+  @override
+  bool get isRunning {
+    _$isRunningAtom.reportRead();
+    return super.isRunning;
+  }
+
+  @override
+  set isRunning(bool value) {
+    _$isRunningAtom.reportWrite(value, super.isRunning, () {
+      super.isRunning = value;
+    });
+  }
+
   late final _$countDownTimerAtom =
       Atom(name: '_TaskStore.countDownTimer', context: context);
 
@@ -123,22 +139,6 @@ mixin _$TaskStore on _TaskStore, Store {
   set isStarted(bool value) {
     _$isStartedAtom.reportWrite(value, super.isStarted, () {
       super.isStarted = value;
-    });
-  }
-
-  late final _$isRunningAtom =
-      Atom(name: '_TaskStore.isRunning', context: context);
-
-  @override
-  bool get isRunning {
-    _$isRunningAtom.reportRead();
-    return super.isRunning;
-  }
-
-  @override
-  set isRunning(bool value) {
-    _$isRunningAtom.reportWrite(value, super.isRunning, () {
-      super.isRunning = value;
     });
   }
 
@@ -261,6 +261,7 @@ mixin _$TaskStore on _TaskStore, Store {
   @override
   String toString() {
     return '''
+isRunning: ${isRunning},
 countDownTimer: ${countDownTimer},
 id: ${id},
 title: ${title},
@@ -268,7 +269,6 @@ description: ${description},
 timerValue: ${timerValue},
 lastKnownDuration: ${lastKnownDuration},
 isStarted: ${isStarted},
-isRunning: ${isRunning},
 isPaused: ${isPaused},
 isResumed: ${isResumed},
 isCompleted: ${isCompleted},

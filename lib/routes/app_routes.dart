@@ -5,7 +5,7 @@ import 'package:ipotato/ui/screens/splash_screen.dart';
 
 class AppRoutes {
   ///Add new routes here
-  ///Add new route names under route_names.dart
+  ///Add new route names under route_names.dart as well
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
       ///Splash screen page
@@ -15,13 +15,15 @@ class AppRoutes {
           builder: (_) => const SplashScreen(),
         );
 
-      ///Splash screen page
+      ///Home screen page
       case RouteNames.homeScreen:
         return MaterialPageRoute(
           settings: const RouteSettings(name: RouteNames.homeScreen),
           builder: (_) => const HomeScreen(),
         );
 
+      ///defining a dummy page to show if any routes getting pushed which is not
+      /// listed under AppRoutes
       default:
         return MaterialPageRoute(
           builder: (_) => SafeArea(
