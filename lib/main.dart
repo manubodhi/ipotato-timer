@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:ipotato/app/app.dart';
-import 'package:ipotato/data/local/db/ipotato_db.dart';
 import 'package:ipotato/di/injector.dart';
 
 void main() async {
+  /// calling this before injection happening
   WidgetsFlutterBinding.ensureInitialized();
 
   /// Forcing only portrait orientation
@@ -13,7 +13,8 @@ void main() async {
     DeviceOrientation.portraitDown,
   ]);
 
-  //configuring injector to start creating singletons for each repository classes
+  ///configuring injector to start creating singletons for each repository
+  ///classes
   await AppInjector.configure();
 
   runApp(const App());

@@ -1,13 +1,9 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:ipotato/constants/app_text_styles.dart';
 import 'package:ipotato/constants/color_palette.dart';
 import 'package:ipotato/constants/dimens.dart';
 import 'package:ipotato/constants/strings.dart';
 import 'package:ipotato/data/local/models/task_model.dart';
-import 'package:ipotato/data/repos/task_repository.dart';
-import 'package:ipotato/di/injector.dart';
 import 'package:ipotato/stores/task_list_store.dart';
 import 'package:ipotato/ui/common_widgets/add_task_dialog_widget.dart';
 import 'package:ipotato/ui/common_widgets/timer_task_card_widget.dart';
@@ -53,44 +49,48 @@ class HomeScreen extends StatelessWidget {
             ),
           ),
         ),
-        body: Observer(
-          builder: (_) => ListView.builder(
-            padding: Dimens.regularPagePadding,
-            shrinkWrap: true,
-            itemCount: taskList.visibleTasks.length,
-            itemBuilder: (_, index) {
-              final task = taskList.visibleTasks[index];
-              return Observer(
-                builder: (_) => TimerTaskCardWidget(
-                  onMarkCompletePressed: () {
-                    taskList.removeTask(task);
-                  },
-                  onPauseButtonPressed: () {
-                    task.pause();
-                  },
-                  onPlayButtonPressed: () {
-                    task.start();
-                  },
-                  onStopButtonPressed: () {
-                    task.stop();
-                    taskList.removeTask(task);
-                  },
-                  taskModel: TaskModel(
-                    id: task.id,
-                    title: task.title,
-                    description: task.description,
-                    timerValue: task.time,
-                    lastKnownDuration: task.lastKnownDuration,
-                    isCompleted: task.isCompleted,
-                    isPaused: task.isPaused,
-                    isResumed: task.isRunning,
-                    isStarted: task.isStarted,
-                  ),
-                ),
-              );
-            },
-          ),
-        ),
+        body: buildTaskList(taskList),
+      ),
+    );
+  }
+
+  Observer buildTaskList(TaskListStore taskList) {
+    return Observer(
+      builder: (_) => ListView.builder(
+        padding: Dimens.regularPagePadding,
+        shrinkWrap: true,
+        itemCount: taskList.visibleTasks.length,
+        itemBuilder: (_, index) {
+          final task = taskList.visibleTasks[index];
+          return Observer(
+            builder: (_) => TimerTaskCardWidget(
+              onMarkCompletePressed: () {
+                taskList.removeTask(task);
+              },
+              onPauseButtonPressed: () {
+                task.pause();
+              },
+              onPlayButtonPressed: () {
+                task.start();
+              },
+              onStopButtonPressed: () {
+                task.stop();
+                taskList.removeTask(task);
+              },
+              taskModel: TaskModel(
+                id: task.id,
+                title: task.title,
+                description: task.description,
+                timerValue: task.time,
+                lastKnownDuration: task.lastKnownDuration,
+                isCompleted: task.isCompleted,
+                isPaused: task.isPaused,
+                isResumed: task.isRunning,
+                isStarted: task.isStarted,
+              ),
+            ),
+          );
+        },
       ),
     );
   }
