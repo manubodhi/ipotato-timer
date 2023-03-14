@@ -48,6 +48,13 @@ class _AddTaskDialogWidgetState extends State<AddTaskDialogWidget> {
   }
 
   @override
+  void dispose() {
+    _titleController.dispose();
+    _descriptionController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Form(
       key: _formKey,
