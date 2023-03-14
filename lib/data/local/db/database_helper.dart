@@ -6,5 +6,4 @@ abstract class DatabaseHelper {
   Future<void> updateTask({required SingleTask dbTaskModel});
   Future<void> deleteTask({required TaskModel taskModel});
   Future<List<TaskModel>> getAllTasks();
-  Future<TaskModel> getSingleTask({required int id});
 }

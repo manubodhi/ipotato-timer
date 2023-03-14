@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:drift/drift.dart';
 import 'package:ipotato/data/local/db/database_helper.dart';
 import 'package:ipotato/data/local/db/ipotato_db.dart';
@@ -29,9 +27,6 @@ class DatabaseHelperImpl extends DatabaseHelper {
   @override
   Future<List<TaskModel>> getAllTasks() async {
     final list = await dbInstance.getAllTasks();
-
-    print('Categories in database: $list');
-
     return list
         .map((item) => TaskModel(
               id: item.id,
@@ -59,12 +54,6 @@ class DatabaseHelperImpl extends DatabaseHelper {
       isResumed: Value(taskModel.isResumed!),
       isStarted: Value(taskModel.isStarted!),
     ));
-  }
-
-  @override
-  Future<TaskModel> getSingleTask({required int id}) async {
-    //TODO
-    return const TaskModel();
   }
 
   @override

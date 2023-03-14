@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:ipotato/constants/enums.dart';
 import 'package:ipotato/data/local/models/task_model.dart';

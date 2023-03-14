@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:ipotato/constants/app_text_styles.dart';
 import 'package:ipotato/constants/color_palette.dart';
@@ -7,8 +5,6 @@ import 'package:ipotato/constants/dimens.dart';
 import 'package:ipotato/constants/images.dart';
 import 'package:ipotato/constants/strings.dart';
 import 'package:ipotato/data/local/models/task_model.dart';
-import 'package:ipotato/data/repos/task_repository.dart';
-import 'package:ipotato/di/injector.dart';
 import 'package:ipotato/ui/common_widgets/regular_horizontal_margin.dart';
 import 'package:ipotato/utils/utils.dart';
 

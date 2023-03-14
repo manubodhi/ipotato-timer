@@ -26,7 +26,6 @@ class _AddTaskDialogWidgetState extends State<AddTaskDialogWidget> {
   final Duration _zeroDuration =
       const Duration(hours: 0, minutes: 0, seconds: 0);
   late Duration _selectedDuration;
-  String _time = "";
 
   late BuildContext _context;
 

@@ -7,8 +7,8 @@ class TaskList extends Table {
   TextColumn get description => text().named('description')();
   TextColumn get lastKnownDuration => text().named('lastKnownDuration')();
   TextColumn get timerValue => text().named('timerValue')();
-  BoolColumn get isCompleted => boolean().withDefault(Constant(false))();
-  BoolColumn get isStarted => boolean().withDefault(Constant(false))();
-  BoolColumn get isPaused => boolean().withDefault(Constant(false))();
-  BoolColumn get isResumed => boolean().withDefault(Constant(false))();
+  BoolColumn get isCompleted => boolean().withDefault(const Constant(false))();
+  BoolColumn get isStarted => boolean().withDefault(const Constant(false))();
+  BoolColumn get isPaused => boolean().withDefault(const Constant(false))();
+  BoolColumn get isResumed => boolean().withDefault(const Constant(false))();
 }

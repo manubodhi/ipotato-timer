@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:ipotato/constants/files.dart';
 import 'package:ipotato/data/local/db/database_helper.dart';
@@ -29,11 +27,6 @@ class TaskRepositoryImpl extends TaskRepository {
   @override
   Future<List<TaskModel>> getAllTasks() async {
     return await databaseHelperInstance.getAllTasks();
-  }
-
-  @override
-  Future<TaskModel> getSingleTasks({required int id}) {
-    return databaseHelperInstance.getSingleTask(id: id);
   }
 
   @override

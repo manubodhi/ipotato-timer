@@ -56,7 +56,7 @@ class $TaskListTable extends TaskList
             SqlDialect.mysql: '',
             SqlDialect.postgres: '',
           }),
-          defaultValue: Constant(false));
+          defaultValue: const Constant(false));
   static const VerificationMeta _isStartedMeta =
       const VerificationMeta('isStarted');
   @override
@@ -69,7 +69,7 @@ class $TaskListTable extends TaskList
             SqlDialect.mysql: '',
             SqlDialect.postgres: '',
           }),
-          defaultValue: Constant(false));
+          defaultValue: const Constant(false));
   static const VerificationMeta _isPausedMeta =
       const VerificationMeta('isPaused');
   @override
@@ -82,7 +82,7 @@ class $TaskListTable extends TaskList
             SqlDialect.mysql: '',
             SqlDialect.postgres: '',
           }),
-          defaultValue: Constant(false));
+          defaultValue: const Constant(false));
   static const VerificationMeta _isResumedMeta =
       const VerificationMeta('isResumed');
   @override
@@ -95,7 +95,7 @@ class $TaskListTable extends TaskList
             SqlDialect.mysql: '',
             SqlDialect.postgres: '',
           }),
-          defaultValue: Constant(false));
+          defaultValue: const Constant(false));
   @override
   List<GeneratedColumn> get $columns => [
         id,

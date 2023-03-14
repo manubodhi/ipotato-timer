@@ -8,5 +8,4 @@ abstract class TaskRepository {
   Future<void> stopSong();
   Future<List<TaskModel>> getAllTasks();
   Future<void> deleteAllTasks();
-  Future<TaskModel> getSingleTasks({required int id});
 }

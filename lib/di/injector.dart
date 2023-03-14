@@ -3,11 +3,8 @@ import 'package:get_it/get_it.dart';
 import 'package:ipotato/data/local/db/database_helper.dart';
 import 'package:ipotato/data/local/db/database_helper_impl.dart';
 import 'package:ipotato/data/local/db/ipotato_db.dart';
-import 'package:ipotato/data/local/prefs/shared_pref_helper.dart';
-import 'package:ipotato/data/local/prefs/shared_pref_helper_impl.dart';
 import 'package:ipotato/data/repos/task_repository.dart';
 import 'package:ipotato/data/repos/task_repository_impl.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 ///Getting instance of getit for dependency injection
 GetIt locator = GetIt.instance;
@@ -21,13 +18,6 @@ class AppInjector {
   ///different baseurl's based on the flavors, injecting firebase analytics based
   ///on the flavor etc.
   static Future<void> configure() async {
-    ///creating sharedpreference instance and creating sharedpreference helper
-    ///classes inspired from my mapetit base project structure
-    final sharedPreferences = await SharedPreferences.getInstance();
-    locator.registerLazySingleton<SharedPrefHelper>(
-      () => SharedPrefHelperImpl(pref: sharedPreferences),
-    );
-
     ///The local drift Db is getting initialised as a singleton
     locator.registerLazySingleton(() => IPotatoDatabase());
 
